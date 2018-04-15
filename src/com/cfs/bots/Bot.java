@@ -1,4 +1,4 @@
-package com.cfs.bot;
+package com.cfs.bots;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

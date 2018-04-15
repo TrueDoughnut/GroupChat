@@ -1,7 +1,7 @@
 package com.cfs.chat;
 
-import com.cfs.bot.Bot;
-import com.starwars.StarWarsBot;
+import com.cfs.bots.Bot;
+import com.cfs.bots.starwars.*;
 
 import java.io.*;
 import java.net.*;
