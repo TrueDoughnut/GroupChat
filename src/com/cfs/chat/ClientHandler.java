@@ -28,6 +28,8 @@ public class ClientHandler implements Runnable {
         this.s = s;
         this.isloggedin = true;
         this.group = group;
+
+        //adding bots
         this.bots.add(new StarWarsBot(dis, dos));
     }
 
@@ -118,6 +120,7 @@ public class ClientHandler implements Runnable {
         this.isloggedin = false;
         this.s.close();
     }
+
     private void nickname() throws IOException {
         String nicknameOptions;
         dos.writeUTF("Enter list for a list of users, " +
@@ -128,8 +131,7 @@ public class ClientHandler implements Runnable {
             switch (nicknameOptions) {
                 case "list":
                     dos.writeUTF(this.getNameClients());
-                    dos.writeUTF(options);
-                    return;
+                    break;
 
                 case "change":
                     dos.writeUTF("Enter your new nickname.");
@@ -154,8 +156,20 @@ public class ClientHandler implements Runnable {
                     dos.writeUTF("That's not an option.");
                     break;
             }
-        } while (!nicknameOptions.equalsIgnoreCase("exit"));
+        } while (!nicknameOptions.equals("exit"));
     }
+    private String getNameClients() {
+        String output = "";
+        for (ClientHandler ch : group.ar) {
+            if (isloggedin) {
+                output += ch.name + " (active), ";
+            } else {
+                output += ch.name + " (inactive), ";
+            }
+        }
+        return output;
+    }
+
     private void group() throws IOException {
         dos.writeUTF("Would you like to join a group (join) or create a new one (create)?");
 
@@ -214,6 +228,7 @@ public class ClientHandler implements Runnable {
             dos.writeUTF("That is not a valid input. Exiting...\n" + options);
         }
     }
+
     private void message() throws IOException {
         dos.writeUTF("Enter your messages: ");
         String received;
@@ -229,24 +244,38 @@ public class ClientHandler implements Runnable {
         dos.writeUTF("Exiting...");
         dos.writeUTF(options);
     }
+
     private void bots() throws IOException {
         dos.writeUTF("Enter list for a list of bots, " +
                 "a bot's name for details, " +
                 "or exit to quit.");
         String received = dis.readUTF().toLowerCase();
 
-        if(received.equals("list")){
-            dos.writeUTF(bots.toString());
-        } else if(received.equals("exit")){
-            dos.writeUTF(options);
-        } else {
-            for(Bot bot : bots){
-                if(bot.name.equalsIgnoreCase(received)){
+        do {
+            if (received.equals("list")) {
+                dos.writeUTF(bots.toString());
+            } else if (received.equals("exit")) {
+                dos.writeUTF(options);
+            } else {
+                Bot bot = isBot(received);
+                if(bot != null){
                     dos.writeUTF(bot.getInfo());
+                } else {
+                    dos.writeUTF("That isn't a bot.");
+                    dos.writeUTF(bots.toString());
                 }
             }
-        }
+        }while(!received.equals("exit"));
     }
+    private Bot isBot(String received){
+        for (Bot bot : bots) {
+            if (bot.name.equalsIgnoreCase(received)) {
+                return bot;
+            }
+        }
+        return null;
+    }
+
     private void defaultFunction(String received) throws IOException {
         if(received.charAt(0) == '!'){
             if(!runBots(received)){
@@ -257,18 +286,6 @@ public class ClientHandler implements Runnable {
         }
     }
 
-
-    private String getNameClients() {
-        String output = "";
-        for (ClientHandler ch : group.ar) {
-            if (isloggedin) {
-                output += ch.name + " (active), ";
-            } else {
-                output += ch.name + " (inactive), ";
-            }
-        }
-        return output;
-    }
 
     private boolean runBots(String received) throws IOException {
         for(Bot bot : bots){
