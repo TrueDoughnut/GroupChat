@@ -31,6 +31,7 @@ public class ClientHandler implements Runnable {
         this.bots.add(new StarWarsBot(dis, dos));
     }
 
+
     private String options =
             "Enter logout to quit, " +
             "nickname for nickname options, " +
