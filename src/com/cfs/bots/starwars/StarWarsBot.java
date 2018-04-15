@@ -11,17 +11,12 @@ import java.util.Arrays;
 
 public class StarWarsBot extends Bot {
 
-    private static ArrayList<String> resources = new ArrayList<>();
+    private static ArrayList<String> resources = new ArrayList<>(
+            Arrays.asList("films", "people", "planets", "species", "starships", "vehicles"));
 
     public StarWarsBot(DataInputStream dis, DataOutputStream dos) {
         super("swapi", dis, dos);
         name = "Star Wars Bot";
-        resources.add("films");
-        resources.add("people");
-        resources.add("planets");
-        resources.add("species");
-        resources.add("starships");
-        resources.add("vehicles");
     }
 
     private int id;

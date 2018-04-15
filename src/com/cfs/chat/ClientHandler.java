@@ -55,7 +55,7 @@ public class ClientHandler implements Runnable {
             try {
 
                 // receive the string
-                received = dis.readUTF().toLowerCase().trim();
+                received = dis.readUTF().toLowerCase().trim().trim();
 
                 System.out.println(received);
 
@@ -127,7 +127,7 @@ public class ClientHandler implements Runnable {
                 "change to change your nickname, or exit to quit.");
 
         do {
-            nicknameOptions = dis.readUTF().toLowerCase();
+            nicknameOptions = dis.readUTF().toLowerCase().trim();
             switch (nicknameOptions) {
                 case "list":
                     dos.writeUTF(this.getNameClients());
@@ -173,7 +173,7 @@ public class ClientHandler implements Runnable {
     private void group() throws IOException {
         dos.writeUTF("Would you like to join a group (join) or create a new one (create)?");
 
-        String received = dis.readUTF().toLowerCase();
+        String received = dis.readUTF().toLowerCase().trim();
 
         if (received.equals("join")) {
             int port;
@@ -234,7 +234,11 @@ public class ClientHandler implements Runnable {
         String received;
         do {
             received = dis.readUTF();
-            writeToAll(received);
+            for (ClientHandler mc : group.ar) {
+                if (!mc.name.equals(this.name) && mc.isloggedin) {
+                    mc.dos.writeUTF(this.name + ": " + received);
+                }
+            }
         } while (!received.equals("exit"));
 
         dos.writeUTF("Exiting...");
@@ -242,12 +246,12 @@ public class ClientHandler implements Runnable {
     }
 
     private void bots() throws IOException {
-        dos.writeUTF("Enter list for a list of bots, " +
+        writeToAll("Enter list for a list of bots, " +
                 "a bot's name for details, " +
                 "or exit to quit.");
-        String received = dis.readUTF().toLowerCase();
-
+        String received;
         do {
+            received = dis.readUTF().toLowerCase().trim();
             if (received.equals("list")) {
                 writeToAll(bots.toString());
             } else if (received.equals("exit")) {
@@ -296,8 +300,12 @@ public class ClientHandler implements Runnable {
 
     private void writeToAll(String received) throws IOException {
         for (ClientHandler mc : group.ar) {
-            if (!mc.name.equals(this.name) && mc.isloggedin) {
-                mc.dos.writeUTF(this.name + ": " + received);
+            if (mc.isloggedin) {
+                if(!mc.name.equals(this.name)) {
+                    mc.dos.writeUTF(this.name + ": " + received);
+                } else {
+                    mc.dos.writeUTF(received);
+                }
             }
         }
     }
