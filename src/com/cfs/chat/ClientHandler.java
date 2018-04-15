@@ -167,7 +167,7 @@ public class ClientHandler implements Runnable {
                 output += ch.name + " (inactive), ";
             }
         }
-        return output;
+        return output.substring(0, output.length()-2);
     }
 
     private void group() throws IOException {
@@ -234,11 +234,7 @@ public class ClientHandler implements Runnable {
         String received;
         do {
             received = dis.readUTF();
-            for (ClientHandler mc : group.ar) {
-                if (!mc.name.equals(this.name) && mc.isloggedin) {
-                    mc.dos.writeUTF(this.name + ": " + received);
-                }
-            }
+            writeToAll(received);
         } while (!received.equals("exit"));
 
         dos.writeUTF("Exiting...");
@@ -253,16 +249,16 @@ public class ClientHandler implements Runnable {
 
         do {
             if (received.equals("list")) {
-                dos.writeUTF(bots.toString());
+                writeToAll(bots.toString());
             } else if (received.equals("exit")) {
-                dos.writeUTF(options);
+                writeToAll(options);
             } else {
                 Bot bot = isBot(received);
                 if(bot != null){
-                    dos.writeUTF(bot.getInfo());
+                    writeToAll(bot.getInfo());
                 } else {
-                    dos.writeUTF("That isn't a bot.");
-                    dos.writeUTF(bots.toString());
+                    writeToAll("That isn't a bot.");
+                    writeToAll(bots.toString());
                 }
             }
         }while(!received.equals("exit"));
@@ -286,16 +282,23 @@ public class ClientHandler implements Runnable {
         }
     }
 
-
     private boolean runBots(String received) throws IOException {
         for(Bot bot : bots){
             String delimiter = received.split(" ")[0]
                     .substring(1);
             if(bot.delimiter.equals(delimiter)){
-                bot.run(received.split(" "));
+                writeToAll(bot.run(received.split(" ")));
                 return true;
             }
         }
         return false;
+    }
+
+    private void writeToAll(String received) throws IOException {
+        for (ClientHandler mc : group.ar) {
+            if (!mc.name.equals(this.name) && mc.isloggedin) {
+                mc.dos.writeUTF(this.name + ": " + received);
+            }
+        }
     }
 }

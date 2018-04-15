@@ -29,7 +29,7 @@ public class StarWarsBot extends Bot {
     private boolean isSearch;
 
     @Override
-    public void run(String[] arr) throws IOException {
+    public String run(String[] arr) throws IOException {
         try {
             String input = arr[1];
             if (isResource(input)) {
@@ -43,34 +43,30 @@ public class StarWarsBot extends Bot {
 
                 switch (input) {
                     case "films":
-                        films(isSearch);
-                        break;
+                        return films(isSearch);
 
                     case "people":
-                        people(isSearch);
-                        break;
+                        return people(isSearch);
 
                     case "planets":
-                        planets(isSearch);
-                        break;
+                        return planets(isSearch);
 
                     case "species":
-                        species(isSearch);
-                        break;
+                        return species(isSearch);
 
                     case "starships":
-                        starships(isSearch);
-                        break;
+                        return starships(isSearch);
 
                     case "vehicles":
-                        vehicles(isSearch);
-                        break;
+                        return vehicles(isSearch);
                 }
             } else {
-                dos.writeUTF("That isn't a resource.");
+                return "That isn't a resource.";
             }
         } catch (IndexOutOfBoundsException e) {
-            dos.writeUTF("Not enough parameters");
+            return "Not enough parameters";
+        } finally {
+            return null;
         }
     }
 
@@ -91,64 +87,64 @@ public class StarWarsBot extends Bot {
         return false;
     }
 
-    private void people(boolean isSearch) throws IOException {
+    private String people(boolean isSearch) throws IOException {
         Person person;
         if (isSearch) {
             person = new Person(this.search);
         } else {
             person = new Person(id, false);
         }
-        dos.writeUTF(person.toString());
+        return person.toString();
     }
 
-    private void films(boolean isSearch) throws IOException {
+    private String films(boolean isSearch) throws IOException {
         Film film;
         if (isSearch) {
             film = new Film(this.search);
         } else {
             film = new Film(id, false);
         }
-        dos.writeUTF(film.toString());
+        return film.toString();
     }
 
-    private void planets(boolean isSearch) throws IOException {
+    private String planets(boolean isSearch) throws IOException {
         Planet planet;
         if (isSearch) {
             planet = new Planet(this.search);
         } else {
             planet = new Planet(id, false);
         }
-        dos.writeUTF(planet.toString());
+        return planet.toString();
     }
 
-    private void species(boolean isSearch) throws IOException {
+    private String species(boolean isSearch) throws IOException {
         Species species;
         if (isSearch) {
             species = new Species(this.search);
         } else {
             species = new Species(id, false);
         }
-        dos.writeUTF(species.toString());
+        return species.toString();
     }
 
-    private void starships(boolean isSearch) throws IOException {
+    private String starships(boolean isSearch) throws IOException {
         Starship starship;
         if (isSearch) {
             starship = new Starship(this.search);
         } else {
             starship = new Starship(id, false);
         }
-        dos.writeUTF(starship.toString());
+        return starship.toString();
     }
 
-    private void vehicles(boolean isSearch) throws IOException {
+    private String vehicles(boolean isSearch) throws IOException {
         Vehicle vehicle;
         if (isSearch) {
             vehicle = new Vehicle(this.search);
         } else {
             vehicle = new Vehicle(id, false);
         }
-        dos.writeUTF(vehicle.toString());
+        return vehicle.toString();
     }
 
 }

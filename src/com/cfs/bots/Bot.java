@@ -18,7 +18,7 @@ public abstract class Bot {
         this.dos = dos;
     }
 
-    public abstract void run(String[] arr) throws IOException;
+    public abstract String run(String[] arr) throws IOException;
 
     public abstract String getInfo();
 
