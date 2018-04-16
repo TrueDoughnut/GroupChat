@@ -3,11 +3,14 @@ package com.cfs.bots.Jikan;
 import com.cfs.bots.Bot;
 
 import java.util.ArrayList; 
+import java.util.Arrays; 
+import java.io.DataInputStream; 
+import java.io.DataOutputStream; 
+import java.io.IOException; 
 
 public class JikanBot extends Bot {
   
-	private static ArrayList<String> resources = new ArrayList<>(
-            Arrays.asList("anime", "manga", "person", "character"));
+	resources = new ArrayList<>(Arrays.asList("anime", "manga", "person", "character"));
 	
   	public JikanBot(DataInputStream dis, DataOutputStream dos){
   		super("jikan", dis, dos); 
@@ -26,13 +29,6 @@ public class JikanBot extends Bot {
 		}
 	}
 	
-	private boolean isResource(String input){
-		for (String str : resources) {
-            if (input.equals(str)) {
-                return true;
-            }
-        }
-        return false;	
-	}
+	
   
 }
