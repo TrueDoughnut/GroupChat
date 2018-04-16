@@ -8,7 +8,8 @@ public abstract class Bot {
 
     public String delimiter;
     public String name;
-
+    static ArrayList<String> resources; 
+    
     public final DataInputStream dis;
     public final DataOutputStream dos;
 
@@ -22,6 +23,15 @@ public abstract class Bot {
 
     public abstract String getInfo();
 
+    private boolean isResource(String input){
+		for (String str : resources) {
+            if (input.equals(str)) {
+                return true;
+            }
+        }
+        return false;	
+	}
+    
     @Override
     public String toString(){
         return this.name;
