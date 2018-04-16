@@ -1,6 +1,6 @@
 package com.cfs.bots.starwars;
 
-import com.cfs.bots.starwars.helper.Helper;
+import com.cfs.bots.helper.Helper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
