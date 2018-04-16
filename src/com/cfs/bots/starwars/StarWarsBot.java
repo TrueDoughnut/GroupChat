@@ -11,8 +11,7 @@ import java.util.Arrays;
 
 public class StarWarsBot extends Bot {
 
-    private static ArrayList<String> resources = new ArrayList<>(
-            Arrays.asList("films", "people", "planets", "species", "starships", "vehicles"));
+    resources = new ArrayList<>(Arrays.asList("films", "people", "planets", "species", "starships", "vehicles"));
 
     public StarWarsBot(DataInputStream dis, DataOutputStream dos) {
         super("swapi", dis, dos);
