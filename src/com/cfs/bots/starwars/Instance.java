@@ -72,9 +72,7 @@ public abstract class Instance implements Constants {
                     + "/" + format);
             JSONObject jsonObject = Helper.getJSONObject(url);
             assignValues(jsonObject);
-        } catch(JSONException e) {
-            e.printStackTrace();
-        } catch(IOException e){
+        } catch(JSONException | IOException e) {
             e.printStackTrace();
         }
     }

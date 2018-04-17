@@ -30,7 +30,7 @@ public class ClientHandler implements Runnable {
         this.group = group;
 
         //adding bots
-        this.bots.add(new StarWarsBot(dis, dos));
+        this.bots.add(new StarWarsBot());
     }
 
     private String options =

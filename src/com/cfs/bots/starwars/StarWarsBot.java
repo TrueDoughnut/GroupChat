@@ -2,20 +2,15 @@ package com.cfs.bots.starwars;
 
 import com.cfs.bots.Bot;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-
 public class StarWarsBot extends Bot {
 
-    resources = new ArrayList<>(Arrays.asList("films", "people", "planets", "species", "starships", "vehicles"));
-
-    public StarWarsBot(DataInputStream dis, DataOutputStream dos) {
-        super("swapi", dis, dos);
+    public StarWarsBot() {
+        super("swapi");
         name = "Star Wars Bot";
+        super.setResources(new ArrayList<>(Arrays.asList("films", "people", "planets", "species", "starships", "vehicles")));
     }
 
     private int id;
@@ -23,7 +18,7 @@ public class StarWarsBot extends Bot {
     private boolean isSearch;
 
     @Override
-    public String run(String[] arr) throws IOException {
+    public String run(String[] arr) {
         try {
             String input = arr[1];
             if (isResource(input)) {
@@ -72,16 +67,7 @@ public class StarWarsBot extends Bot {
                 + "\nExample: !swapi people Luke Skywalker";
     }
 
-    private boolean isResource(String input) {
-        for (String str : resources) {
-            if (input.equals(str)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private String people(boolean isSearch) throws IOException {
+    private String people(boolean isSearch) {
         Person person;
         if (isSearch) {
             person = new Person(this.search);
@@ -91,7 +77,7 @@ public class StarWarsBot extends Bot {
         return person.toString();
     }
 
-    private String films(boolean isSearch) throws IOException {
+    private String films(boolean isSearch) {
         Film film;
         if (isSearch) {
             film = new Film(this.search);
@@ -101,7 +87,7 @@ public class StarWarsBot extends Bot {
         return film.toString();
     }
 
-    private String planets(boolean isSearch) throws IOException {
+    private String planets(boolean isSearch) {
         Planet planet;
         if (isSearch) {
             planet = new Planet(this.search);
@@ -111,7 +97,7 @@ public class StarWarsBot extends Bot {
         return planet.toString();
     }
 
-    private String species(boolean isSearch) throws IOException {
+    private String species(boolean isSearch) {
         Species species;
         if (isSearch) {
             species = new Species(this.search);
@@ -121,7 +107,7 @@ public class StarWarsBot extends Bot {
         return species.toString();
     }
 
-    private String starships(boolean isSearch) throws IOException {
+    private String starships(boolean isSearch) {
         Starship starship;
         if (isSearch) {
             starship = new Starship(this.search);
@@ -131,7 +117,7 @@ public class StarWarsBot extends Bot {
         return starship.toString();
     }
 
-    private String vehicles(boolean isSearch) throws IOException {
+    private String vehicles(boolean isSearch) {
         Vehicle vehicle;
         if (isSearch) {
             vehicle = new Vehicle(this.search);

@@ -1,29 +1,28 @@
 package com.cfs.bots;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public abstract class Bot {
 
     public String delimiter;
     public String name;
-    static ArrayList<String> resources; 
-    
-    public final DataInputStream dis;
-    public final DataOutputStream dos;
 
-    public Bot(String delimiter, DataInputStream dis, DataOutputStream dos){
+    protected void setResources(ArrayList<String> resources) {
+        this.resources = resources;
+    }
+
+    protected ArrayList<String> resources;
+
+    public Bot(String delimiter){
         this.delimiter = delimiter;
-        this.dis = dis;
-        this.dos = dos;
     }
 
     public abstract String run(String[] arr) throws IOException;
 
     public abstract String getInfo();
 
-    private boolean isResource(String input){
+    public boolean isResource(String input){
 		for (String str : resources) {
             if (input.equals(str)) {
                 return true;

@@ -1,4 +1,4 @@
-package com.cfs.bots.starwars.helper;
+package com.cfs.bots.helper;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
