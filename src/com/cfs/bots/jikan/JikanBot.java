@@ -33,15 +33,41 @@ public class JikanBot extends Bot {
 
 
 	@Override
-	public String run(String[] arr) throws IOException {
+	public String run(String[] arr){
 		String input = arr[1]; 
 		if(isResource(input)){
-			if(extendedRequest(arr[2])){
-
+			if(extendedRequest(arr[2])) {
+                switch (input) {
+                    case "anime":
+                        return new Anime(Integer.valueOf(arr[3]), arr[2])
+                                .toString();
+                    case "manga":
+                        return new Manga(Integer.valueOf(arr[3]), arr[2])
+                                .toString();
+                    case "person":
+                        return new Person(Integer.valueOf(arr[3]), arr[2])
+                                .toString();
+                    case "character":
+                        return new Character(Integer.valueOf(arr[3]), arr[2])
+                                .toString();
+                }
             } else {
-
+			    return "That is not a valid request.";
             }
-		}
+		} else {
+            if(input.equals("search")){
+                try {
+                    System.out.println(new Search(
+                            arr[2], arr[3], Integer.valueOf(arr[4])));
+                } catch(IndexOutOfBoundsException e){
+                    System.out.println(new Search(
+                            arr[2], arr[3]));
+                }
+            } else {
+                return "That is not a valid command.";
+            }
+        }
+        return null;
 	}
 
     public boolean extendedRequest(String input){

@@ -20,6 +20,20 @@ public abstract class Instance implements Constants {
         this.request = request;
     }
 
+    Instance(String type, String query, int page){
+        try {
+            URL url = new URL(baseURL + type + "/" + query + "/" + page);
+            assignValues(Helper.getJSONObject(url).
+                    getJSONArray("result").
+                    getJSONObject(0));
+        } catch(IOException | JSONException e){
+            e.printStackTrace();
+        }
+    }
+    Instance(String type, String query){
+        this(type, query, 1);
+    }
+
     abstract void assignValues(JSONObject jsonObject) throws JSONException;
 
     void getData(){
@@ -32,4 +46,9 @@ public abstract class Instance implements Constants {
         }
     }
 
+
+    @Override
+    public String toString(){
+        return this.name;
+    }
 }

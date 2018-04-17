@@ -1,6 +1,5 @@
 package com.cfs.bots;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public abstract class Bot {
@@ -18,7 +17,7 @@ public abstract class Bot {
         this.delimiter = delimiter;
     }
 
-    public abstract String run(String[] arr) throws IOException;
+    public abstract String run(String[] arr);
 
     public abstract String getInfo();
 

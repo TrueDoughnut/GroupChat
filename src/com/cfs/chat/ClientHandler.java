@@ -1,6 +1,7 @@
 package com.cfs.chat;
 
 import com.cfs.bots.Bot;
+import com.cfs.bots.jikan.JikanBot;
 import com.cfs.bots.starwars.*;
 
 import java.io.*;
@@ -31,6 +32,7 @@ public class ClientHandler implements Runnable {
 
         //adding bots
         this.bots.add(new StarWarsBot());
+        this.bots.add(new JikanBot());
     }
 
     private String options =
