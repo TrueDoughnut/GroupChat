@@ -4,7 +4,6 @@ import com.cfs.bots.Bot;
 
 import java.util.ArrayList; 
 import java.util.Arrays;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,9 +27,6 @@ public class JikanBot extends Bot {
   	    extendedRequests.put("character", new ArrayList<>(
   	            Arrays.asList("pictures")));
   	}
-  
-	private int id; 
-
 
 	@Override
 	public String run(String[] arr){
@@ -47,6 +43,7 @@ public class JikanBot extends Bot {
                     case "person":
                         return new Person(Integer.valueOf(arr[3]), arr[2])
                                 .toString();
+
                     case "character":
                         return new Character(Integer.valueOf(arr[3]), arr[2])
                                 .toString();
@@ -83,6 +80,7 @@ public class JikanBot extends Bot {
         return false;
     }
 
+    //Finish this method
     @Override
     public String getInfo(){
         return "Gets anime information";

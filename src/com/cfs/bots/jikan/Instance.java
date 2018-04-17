@@ -35,6 +35,7 @@ public abstract class Instance implements Constants {
     }
 
     abstract void assignValues(JSONObject jsonObject) throws JSONException;
+    abstract void defaultInfo(JSONObject jsonObject) throws JSONException;
 
     void getData(){
         try {
