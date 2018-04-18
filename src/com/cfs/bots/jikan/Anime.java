@@ -1,6 +1,7 @@
 package com.cfs.bots.jikan;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ public class Anime extends Instance {
         openingTheme, endingTheme = new ArrayList<>();
 
     @Override
-    public void assignValues(JSONObject jsonObject){
+    public void assignValues(JSONObject jsonObject) throws JSONException {
         switch(request){
             case "characters_staff":
                 charactersStaff(jsonObject);
@@ -49,7 +50,7 @@ public class Anime extends Instance {
     }
 
     @Override
-    public void defaultInfo(JSONObject jsonObject){
+    public void defaultInfo(JSONObject jsonObject) throws JSONException {
         name = jsonObject.getString("title_english");
         type = jsonObject.getString("type");
         source = jsonObject.getString("source");
@@ -73,11 +74,11 @@ public class Anime extends Instance {
         premiered = jsonObject.getString("premiered");
         broadcast = jsonObject.getString("broadcast");
 
-        JSONObject adapation = jsonObject.getJSONObject("related")
+        JSONObject adaptation = jsonObject.getJSONObject("related")
                 .getJSONArray("Adaptation")
                 .getJSONObject(0);
-        adaptationType = adapation.getString("type");
-        adaptationName = adapation.getString("title");
+        adaptationType = adaptation.getString("type");
+        adaptationName = adaptation.getString("title");
 
         parseList(jsonObject.getJSONArray("producer"), producer);
         parseList(jsonObject.getJSONArray("licensor"), licensor);
@@ -99,27 +100,27 @@ public class Anime extends Instance {
         }
     }
 
-    private void charactersStaff(JSONObject jsonObject){
+    private void charactersStaff(JSONObject jsonObject) throws JSONException {
         defaultInfo(jsonObject);
     }
 
-    private void episodes(JSONObject jsonObject){
+    private void episodes(JSONObject jsonObject) throws JSONException {
         defaultInfo(jsonObject);
     }
 
-    private void news(JSONObject jsonObject){
+    private void news(JSONObject jsonObject) throws JSONException {
         defaultInfo(jsonObject);
     }
 
-    private void pictures(JSONObject jsonObject){
+    private void pictures(JSONObject jsonObject) throws JSONException {
         defaultInfo(jsonObject);
     }
 
-    private void videos(JSONObject jsonObject){
+    private void videos(JSONObject jsonObject) throws JSONException {
         defaultInfo(jsonObject);
     }
 
-    private void stats(JSONObject jsonObject){
+    private void stats(JSONObject jsonObject) throws JSONException {
         defaultInfo(jsonObject);
     }
 
