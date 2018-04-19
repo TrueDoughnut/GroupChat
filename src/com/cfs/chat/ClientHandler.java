@@ -238,7 +238,7 @@ public class ClientHandler implements Runnable {
             received = dis.readUTF();
             for (ClientHandler mc : group.ar) {
                 if (mc.isloggedin && !mc.name.equals(this.name)) {
-                    mc.dos.writeUTF(received);
+                    mc.dos.writeUTF(this.name + ": " + received);
                 }
             }
         } while (!received.equals("exit"));
