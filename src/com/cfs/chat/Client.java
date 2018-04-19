@@ -82,6 +82,7 @@ class GUI implements Runnable, ActionListener{
         });
 
         doc = (StyledDocument) jEditorPane.getDocument();
+
         attributeSet = new SimpleAttributeSet();
         StyleConstants.setFontFamily(attributeSet, "Segoe UI");
         StyleConstants.setFontSize(attributeSet, 14);
@@ -128,12 +129,14 @@ class GUI implements Runnable, ActionListener{
             ioException.printStackTrace();
             System.exit(1);
         }
+
         //push out input
         try {
             urlParsing(tx.getText());
         } catch(BadLocationException|IOException exception){
             exception.printStackTrace();
         }
+
         //scroll text area
         jEditorPane.setCaretPosition(jEditorPane.getDocument().getLength());
         //clear text field
@@ -141,21 +144,27 @@ class GUI implements Runnable, ActionListener{
     }
 
     private void urlParsing(String received) throws BadLocationException, IOException {
-        String output = "";
+
         if(received.indexOf("http") >= 0){
+            String output = "";
             String[] arr = received.split(" ");
+
             for(int i = 0; i < arr.length; i++){
                 if(arr[i].substring(0, 4).equalsIgnoreCase("http")){
                     for(int j = 0; j < i; j++){
                         output += arr[j] + " ";
                     }
+
                     output += "<a href=\"" + arr[i] + "\">" +  arr[i] + "</a>" + " ";
+
                     for(int j = i+1; j < arr.length; j++){
                         output += arr[j] + " ";
                     }
                 }
             }
+
             editorKit.read(new StringReader(output), doc, doc.getLength());
+
         } else {
             doc.insertString(doc.getLength(), received + "\n", attributeSet);
         }
