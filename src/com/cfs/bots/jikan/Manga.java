@@ -1,5 +1,6 @@
 package com.cfs.bots.jikan;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Manga extends Instance {
@@ -11,6 +12,11 @@ public class Manga extends Instance {
 
     @Override
     public void assignValues(JSONObject jsonObject){
+
+    }
+
+    @Override
+    void defaultInfo(JSONObject jsonObject) throws JSONException {
 
     }
 
