@@ -1,5 +1,6 @@
 package com.cfs.bots.jikan;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Search extends Instance {
@@ -13,6 +14,11 @@ public class Search extends Instance {
 
     @Override
     public void assignValues(JSONObject jsonObject){
+
+    }
+
+    @Override
+    void defaultInfo(JSONObject jsonObject) throws JSONException {
 
     }
 

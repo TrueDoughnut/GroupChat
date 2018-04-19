@@ -4,6 +4,8 @@ package com.cfs.chat;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.text.*;
 import java.io.*;
 import java.net.*;
 
@@ -38,8 +40,11 @@ class GUI implements Runnable, ActionListener{
     }
 
 
-    JTextArea ta;
+    JEditorPane jEditorPane;
     JTextField tx;
+    SimpleAttributeSet attributeSet;
+    StyledDocument doc;
+    EditorKit editorKit;
 
     public void createAndShowGUI(){
         JFrame f = new JFrame("my chat");
@@ -59,11 +64,30 @@ class GUI implements Runnable, ActionListener{
         JButton b1 = new JButton("Send");
         p1.add(b1, BorderLayout.EAST);
 
-        ta = new JTextArea();
-        ta.setLineWrap(true);
-        ta.setWrapStyleWord(true);
+        jEditorPane = new JEditorPane();
+        jEditorPane.setEditable(false);
+        jEditorPane.setEditorKit(JEditorPane.createEditorKitForContentType("text/html"));
+        editorKit = jEditorPane.getEditorKit();
 
-        JScrollPane jScrollPane = new JScrollPane(ta);
+        jEditorPane.addHyperlinkListener(e -> {
+            if(e.getEventType() == HyperlinkEvent.EventType.ACTIVATED){
+                if(Desktop.isDesktopSupported()){
+                    try {
+                        Desktop.getDesktop().browse(e.getURL().toURI());
+                    } catch(URISyntaxException|IOException exception){
+                        exception.printStackTrace();
+                    }
+                }
+            }
+        });
+
+        doc = (StyledDocument) jEditorPane.getDocument();
+
+        attributeSet = new SimpleAttributeSet();
+        StyleConstants.setFontFamily(attributeSet, "Segoe UI");
+        StyleConstants.setFontSize(attributeSet, 14);
+
+        JScrollPane jScrollPane = new JScrollPane(jEditorPane);
         p2.add(jScrollPane, BorderLayout.CENTER);
         p2.add(p1, BorderLayout.SOUTH);
 
@@ -76,9 +100,9 @@ class GUI implements Runnable, ActionListener{
             while (true) {
                 try {
                     String received = dis.readUTF();
-                    ta.append(received + "\n");
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
+                    urlParsing(received);
+                } catch (IOException|BadLocationException exception) {
+                    exception.printStackTrace();
                     System.exit(1);
                 }
             }
@@ -88,12 +112,8 @@ class GUI implements Runnable, ActionListener{
         f.setVisible(true);
 
         //run on close
-        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable(){
-            @Override
-            public void run(){
-                receiveMessage.interrupt();
-            }
-        }, "Shutdown thread"));
+        Runtime.getRuntime().addShutdownHook(new Thread(() ->
+                receiveMessage.interrupt(), "Shutdown thread"));
     }
 
     @Override
@@ -102,18 +122,51 @@ class GUI implements Runnable, ActionListener{
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e){
         try{
             dos.writeUTF(tx.getText());
         } catch(IOException ioException) {
             ioException.printStackTrace();
             System.exit(1);
         }
+
         //push out input
-        ta.append(tx.getText() + "\n");
+        try {
+            urlParsing(tx.getText());
+        } catch(BadLocationException|IOException exception){
+            exception.printStackTrace();
+        }
+
         //scroll text area
-        ta.setCaretPosition(ta.getDocument().getLength());
+        jEditorPane.setCaretPosition(jEditorPane.getDocument().getLength());
         //clear text field
         tx.setText("");
+    }
+
+    private void urlParsing(String received) throws BadLocationException, IOException {
+
+        if(received.indexOf("http") >= 0){
+            String output = "";
+            String[] arr = received.split(" ");
+
+            for(int i = 0; i < arr.length; i++){
+                if(arr[i].substring(0, 4).equalsIgnoreCase("http")){
+                    for(int j = 0; j < i; j++){
+                        output += arr[j] + " ";
+                    }
+
+                    output += "<a href=\"" + arr[i] + "\">" +  arr[i] + "</a>" + " ";
+
+                    for(int j = i+1; j < arr.length; j++){
+                        output += arr[j] + " ";
+                    }
+                }
+            }
+
+            editorKit.read(new StringReader(output), doc, doc.getLength());
+
+        } else {
+            doc.insertString(doc.getLength(), received + "\n", attributeSet);
+        }
     }
 }
